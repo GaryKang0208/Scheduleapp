@@ -74,14 +74,24 @@ public class ScheduleService {
         // 엔티티 update 메서드로 값 변경
         // 비밀번호가 맞는지 확인후 update를 쓴다
         if (!schedule.getPassword().equals(updateRequest.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-            //
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
         schedule.update(updateRequest.getTitle(), updateRequest.getAuthor());
         Schedule updatedSchedule = schedulRepository.save(schedule);
 
         return new UpdateResponse(updatedSchedule.getId(),updatedSchedule.getTitle(), updateRequest.getAuthor(), updatedSchedule.getContents(), updatedSchedule.getCreatedAt(),updatedSchedule.getModifiedAt());
+    }
+
+    @Transactional
+    public void delete(Long id, DeleteRequest deleteRequest) {
+        Schedule schedule = getOrThrow(id);
+        if (!schedule.getPassword().equals(deleteRequest.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+        }
+
+        schedulRepository.delete(schedule);
+
     }
 }
 
