@@ -3,15 +3,15 @@ package com.example.app.controller;
 
 import com.example.app.dto.CreateRequest;
 import com.example.app.dto.CreateResponse;
+import com.example.app.dto.GetResponse;
 import com.example.app.service.ScheduleService;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController // 데이터를 반환하는 아노테이선 (Json)
 @RequiredArgsConstructor // final 필드를 받아 생성자를 만들어주는 아노테이션
@@ -30,4 +30,19 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 
     }
+    // 전체 조회
+    @GetMapping
+    public ResponseEntity<List<GetResponse>> findAll(){
+        List<GetResponse> responseList = scheduleService.findAll();
+
+        return ResponseEntity.ok(responseList);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetResponse> findOne(Long id){
+        GetResponse response = scheduleService.findOne(id);
+        return ResponseEntity.ok(response);
+    }
+
 }
