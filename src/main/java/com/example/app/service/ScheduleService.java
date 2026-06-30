@@ -75,12 +75,16 @@ public class ScheduleService {
         // 비밀번호가 맞는지 확인후 update를 쓴다
         if (!schedule.getPassword().equals(updateRequest.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
-        }
+        }else{   schedule.update(updateRequest.getTitle(), updateRequest.getAuthor());
+            Schedule updatedSchedule = schedulRepository.save(schedule);
 
-        schedule.update(updateRequest.getTitle(), updateRequest.getAuthor());
-        Schedule updatedSchedule = schedulRepository.save(schedule);
+            return new UpdateResponse(updatedSchedule.getId(),
+                    updatedSchedule.getTitle(),
+                    updateRequest.getAuthor(),
+                    updatedSchedule.getContents(),
+                    updatedSchedule.getCreatedAt(),
+                    updatedSchedule.getModifiedAt());}
 
-        return new UpdateResponse(updatedSchedule.getId(),updatedSchedule.getTitle(), updateRequest.getAuthor(), updatedSchedule.getContents(), updatedSchedule.getCreatedAt(),updatedSchedule.getModifiedAt());
     }
 
     @Transactional
@@ -88,9 +92,9 @@ public class ScheduleService {
         Schedule schedule = getOrThrow(id);
         if (!schedule.getPassword().equals(deleteRequest.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
-        }
+        }else{ schedulRepository.delete(schedule);}
 
-        schedulRepository.delete(schedule);
+
 
     }
 }
