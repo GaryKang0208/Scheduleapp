@@ -1,9 +1,7 @@
 package com.example.app.controller;
 
 
-import com.example.app.dto.CreateRequest;
-import com.example.app.dto.CreateResponse;
-import com.example.app.dto.GetResponse;
+import com.example.app.dto.*;
 import com.example.app.service.ScheduleService;
 
 import lombok.RequiredArgsConstructor;
@@ -40,9 +38,15 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetResponse> findOne(Long id){
+    public ResponseEntity<GetResponse> findOne(@PathVariable  Long id){
         GetResponse response = scheduleService.findOne(id);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateResponse> update(@PathVariable Long id, @RequestBody UpdateRequest updateRequest){
+        UpdateResponse updateResponse = scheduleService.update(id,updateRequest);
+        return ResponseEntity.ok(updateResponse);
     }
 
 }

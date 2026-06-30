@@ -1,8 +1,6 @@
 package com.example.app.service;
 
-import com.example.app.dto.CreateRequest;
-import com.example.app.dto.CreateResponse;
-import com.example.app.dto.GetResponse;
+import com.example.app.dto.*;
 import com.example.app.entity.Schedule;
 import com.example.app.repository.SchedulRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +65,23 @@ public class ScheduleService {
         return schedulRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "방명록을 찾을 수 없어요: " + id));
+    }
+
+    @Transactional
+    public UpdateResponse update(Long id, UpdateRequest updateRequest) {
+        Schedule schedule = getOrThrow(id);
+
+        // 엔티티 update 메서드로 값 변경
+        // 비밀번호가 맞는지 확인후 update를 쓴다
+        if (!schedule.getPassword().equals(updateRequest.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            //
+        }
+
+        schedule.update(updateRequest.getTitle(), updateRequest.getAuthor());
+        Schedule updatedSchedule = schedulRepository.save(schedule);
+
+        return new UpdateResponse(updatedSchedule.getId(),updatedSchedule.getTitle(), updateRequest.getAuthor(), updatedSchedule.getContents(), updatedSchedule.getCreatedAt(),updatedSchedule.getModifiedAt());
     }
 }
 
