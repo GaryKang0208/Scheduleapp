@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SchedulRepository extends JpaRepository<Schedule, Long> {
 
-    List<Schedule> findAllByAuthorOrderByModifiedAt(String author);
+    List<Schedule> findAllByAuthorOrderByModifiedAtDesc(String author);
 }
