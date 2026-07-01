@@ -25,10 +25,15 @@ public class ScheduleService {
     public CreateResponse create(CreateRequest createSchedule) {
 
         //1. 요청 Dto  값으로 엔티티 생성
-        Schedule schedule = new Schedule(createSchedule.getTitle(), createSchedule.getContents(), createSchedule.getAuthor(), createSchedule.getPassword());
+        Schedule schedule = new Schedule(
+                createSchedule.getTitle(),
+                createSchedule.getContents(),
+                createSchedule.getAuthor(),
+                createSchedule.getPassword());
 
         Schedule savedSchedule = schedulRepository.save(schedule); // db 에 저장 saveid. 생성일이 채워진 엔티리를 반환
-        return new CreateResponse(savedSchedule.getId(),
+        return new CreateResponse(
+                savedSchedule.getId(),
                 savedSchedule.getTitle(),
                 savedSchedule.getContents(),
                 savedSchedule.getAuthor(),
@@ -42,7 +47,8 @@ public class ScheduleService {
         List<Schedule> scheduleList = schedulRepository.findAll();
 
         for(Schedule schedule : scheduleList){
-            GetResponse getResponse = new GetResponse(schedule.getId(),
+            GetResponse getResponse = new GetResponse(
+                    schedule.getId(),
                     schedule.getTitle(),
                     schedule.getContents(),
                     schedule.getAuthor(),
@@ -56,10 +62,14 @@ public class ScheduleService {
     public GetResponse findOne(Long id) {
 
         Schedule schedule = getOrThrow(id);
-        return new GetResponse(schedule.getId(), schedule.getTitle(), schedule.getContents(), schedule.getAuthor(), schedule.getCreatedAt(),schedule.getModifiedAt());
+        return new GetResponse(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContents(),
+                schedule.getAuthor(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt());
     }
-
-
 
     private Schedule getOrThrow(Long id) {
         return schedulRepository.findById(id)
@@ -78,7 +88,8 @@ public class ScheduleService {
         }else{   schedule.update(updateRequest.getTitle(), updateRequest.getAuthor());
             Schedule updatedSchedule = schedulRepository.save(schedule);
 
-            return new UpdateResponse(updatedSchedule.getId(),
+            return new UpdateResponse(
+                    updatedSchedule.getId(),
                     updatedSchedule.getTitle(),
                     updateRequest.getAuthor(),
                     updatedSchedule.getContents(),
